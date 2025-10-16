@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Dae!</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #fff5f8, #ffeaf0);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #444;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 400px;
+    width: 90%;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(255,182,193,0.3);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  h1 {
+    color: #e26a93;
+    font-weight: 600;
+    font-size: 1.4em;
+    margin-bottom: 5px;
+  }
+
+  p.subtitle {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 25px;
+  }
+
+  /* Unlock Screen */
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 15px;
+    max-width: 220px;
+  }
+
+  .key {
+    background: #ffeaf0;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1.2em;
+    color: #e26a93;
+    border: none;
+    transition: all 0.3s;
+  }
+
+  .key:hover {
+    background: #ffd6e3;
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    background: #ffd6e3;
+    border-radius: 50%;
+    margin: 0 4px;
+  }
+
+  .dot.filled {
+    background: #e26a93;
+  }
+
+  .envelope-screen, .main-content {
+    display: none;
+    animation: fadeIn 0.6s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Envelope animation */
+  .envelope {
+    font-size: 70px;
+    margin-top: 30px;
+    cursor: pointer;
+    animation: glow 1.5s infinite alternate;
+    transition: transform 0.4s;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #ffbfd2, 0 0 10px #ffbfd2; }
+    to { text-shadow: 0 0 15px #ff94b7, 0 0 30px #ff94b7; }
+  }
+
+  .envelope.opening {
+    animation: openEnvelope 0.8s ease forwards;
+  }
+
+  @keyframes openEnvelope {
+    0% { transform: rotateX(0deg) scale(1); }
+    50% { transform: rotateX(-60deg) scale(1.1); }
+    100% { transform: rotateX(0deg) scale(1); opacity: 0; }
+  }
+
+  .icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .icon-btn {
+    background: #ffeaf0;
+    border-radius: 16px;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, background 0.3s;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover {
+    background: #ffd6e3;
+    transform: scale(1.08);
+  }
+
+  .panel {
+    display: none;
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  .panel.active {
+    display: block;
+  }
+
+  .message-box {
+    background: #fff5f8;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+
+  .section-title {
+    color: #e26a93;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  button {
+    background: #fff;
+    border: 1px solid #eeb4c6;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    color: #e26a93;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  button:hover {
+    background: #e26a93;
+    color: #fff;
+  }
+
+  footer {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 15px;
+  }
+
+  footer span {
+    color: #e26a93;
+  }
+
+  /* Music frame styling */
+  .music-frame {
+    border: 4px solid #ffd1dc;
+    border-radius: 16px;
+    padding: 10px;
+    margin-bottom: 12px;
+    background-color: #fff0f5;
+  }
+
+  .music-frame img {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .dedication-title {
+    font-weight: 600;
+    color: #e26a93;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Unlock Screen -->
+  <div class="container" id="unlock-screen">
+    <h1>happy birthday, dae! 🎉</h1>
+    <p class="subtitle">Enter the 4-digit code to unlock your gift 💝</p>
+    <div class="dots">
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot4"></div>
+    </div>
+    <div class="keypad">
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key" onclick="clearCode()">⌫</button>
+    </div>
+  </div>
+
+  <!-- Envelope Screen -->
+  <div class="container envelope-screen" id="envelope-screen">
+    <h1>you unlocked your surprise 💌</h1>
+    <p class="subtitle">tap the envelope to open</p>
+    <div class="envelope" id="envelope" onclick="openLetter()">✉️</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container main-content" id="main-content">
+    <h1>happy birthday, dae! 🎉</h1>
+    <p class="subtitle">choose a section to view 💖</p>
+
+    <div class="icons">
+      <div class="icon-btn" onclick="showPanel('message')">💌</div>
+      <div class="icon-btn" onclick="showPanel('music')">🎧</div>
+      <div class="icon-btn" onclick="showPanel('photos')">📸</div>
+    </div>
+
+    <!-- Message Panel -->
+    <div id="message" class="panel">
+      <div class="message-box">
+        <div class="section-title">A Message For You</div>
+        <p contenteditable="true">
+          happy 17th birthday, dae!! i may not be by your side para i-celebrate imong special day with you,
+          but i want you to know that i’m praying for you and your fam, samot nas tita unta magkasinabot namo, and wishing you a wonderful birthday. 
+          whatever you ask may you receive, whatever you seek may you find, whatever you wish may it be fulfilled.
+          take care of yourself, bayettt. always remember that your babyisha loves you so muchhh ^^
+        </p>
+      </div>
+    </div>
+
+    <!-- Music Panel -->
+    <div id="music" class="panel">
+      <div class="message-box">
+        <div class="section-title">Now Playing 🎵</div>
+        <div class="dedication-title">I dedicated this song for you 💗</div>
+        <div class="music-frame">
+          <img src="file:///storage/emulated/0/Download/2cedcea0-afc2-4211-8060-17cfb657950c.jpeg " alt="Dedication Image">
+        </div>
+        <p>Paksa — CRSTN</p>
+        <audio controls>
+          <source src="file:///storage/emulated/0/Download/ssstik.io_1760495168038.mp3" type="audio/mpeg">
+          Your browser does not support audio playback.
+        </audio>
+      </div>
+    </div>
+
+    <!-- Photos Panel -->
+    <div id="photos" class="panel">
+      <div class="message-box">
+        <div class="section-title">Momeries to Keep 📷</div>
+        <p>Note: wala koy lain mabutang dari kay wala man tay pic together</p>
+        <img src="file:///storage/emulated/0/Download/Web_Photo_Editor%20(1).jpg" alt="Memory Photo" style="width:100%;border-radius:12px;">
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      
+    </div>
+
+    <footer>Made with <span>♥</span> — by babyisha</footer>
+  </div>
+
+<script>
+  let inputCode = "";
+  const correctCode = "0011";
+
+  function pressKey(num) {
+    if (inputCode.length < 4) {
+      inputCode += num;
+      document.getElementById("dot" + inputCode.length).classList.add("filled");
+    }
+    if (inputCode.length === 4) checkCode();
+  }
+
+  function clearCode() {
+    inputCode = "";
+    document.querySelectorAll(".dot").forEach(dot => dot.classList.remove("filled"));
+  }
+
+  function checkCode() {
+    if (inputCode === correctCode) {
+      document.getElementById("unlock-screen").style.display = "none";
+      document.getElementById("envelope-screen").style.display = "block";
+    } else {
+      alert("Wrong code! Try again 💔");
+      clearCode();
+    }
+  }
+
+  function openLetter() {
+    const env = document.getElementById("envelope");
+    env.classList.add("opening");
+    setTimeout(() => {
+      document.getElementById("envelope-screen").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    }, 900);
+  }
+
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function saveEdits() {
+    localStorage.setItem('birthdayLetter', document.body.innerHTML);
+    alert('Edits saved locally! 🩷');
+  }
+
+  function downloadHTML() {
+    const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Virtual_Birthday_Letter.html';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
